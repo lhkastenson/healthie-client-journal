@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_28_210045) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_28_215737) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -33,6 +33,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_28_210045) do
     t.index ["provider_id"], name: "index_enrollments_on_provider_id"
   end
 
+  create_table "journal_entries", force: :cascade do |t|
+    t.text "body", null: false
+    t.bigint "client_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_journal_entries_on_client_id"
+  end
+
   create_table "providers", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email"
@@ -43,4 +51,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_28_210045) do
 
   add_foreign_key "enrollments", "clients"
   add_foreign_key "enrollments", "providers"
+  add_foreign_key "journal_entries", "clients"
 end
