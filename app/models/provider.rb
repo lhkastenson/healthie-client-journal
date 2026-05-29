@@ -9,4 +9,10 @@ class Provider < ApplicationRecord
   def self.clients_for(provider_id)
     find(provider_id).clients
   end
+
+  def self.journal_entries_for(provider_id)
+    JournalEntry.joins(client: :providers)
+      .where(providers: { id: provider_id })
+      .order(created_at: :desc)
+  end
 end
