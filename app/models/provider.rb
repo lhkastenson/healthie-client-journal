@@ -4,4 +4,9 @@ class Provider < ApplicationRecord
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true
+
+
+  def self.clients_for(provider_id)
+    find(provider_id).clients
+  end
 end
