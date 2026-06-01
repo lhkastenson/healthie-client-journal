@@ -5,4 +5,12 @@ class Client < ApplicationRecord
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true
+
+  def self.providers_for(client_id)
+    find(client_id).providers
+  end
+
+  def self.journal_entries_for(client_id)
+    find(client_id).journal_entries.order(created_at: :desc)
+  end
 end
