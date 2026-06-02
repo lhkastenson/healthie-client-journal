@@ -1,24 +1,68 @@
-# README
+# Healthie Rails API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A Rails API modeling providers, clients, enrollments, and health journal entries.
 
-Things you may want to cover:
+## Setup
 
-* Ruby version
+### Requirements
 
-* System dependencies
+- Ruby 3.x (see `.ruby-version`)
+- Docker and Docker Compose
 
-* Configuration
+### Getting Started
 
-* Database creation
+**1. Start the database**
 
-* Database initialization
+```bash
+docker compose up -d
+```
 
-* How to run the test suite
+**2. Install dependencies**
 
-* Services (job queues, cache servers, search engines, etc.)
+```bash
+bundle install
+```
 
-* Deployment instructions
+**3. Create and migrate the database**
 
-* ...
+```bash
+rails db:create
+rails db:migrate
+```
+
+**4. (Optional) Seed sample data**
+
+```bash
+rails db:seed
+```
+
+**5. Run the test suite**
+
+```bash
+bundle exec rspec
+```
+
+## Data Model
+
+### Provider
+Represents a health provider such as a dietitian. Has a name and email address. Can have many clients through enrollments.
+
+### Client
+Represents a patient or client. Has a name and email address. Can have many providers through enrollments, and can post journal entries.
+
+### Enrollment
+Join model between Provider and Client. Each enrollment has a plan — either `basic` or `premium`. A client cannot be enrolled with the same provider more than once.
+
+### JournalEntry
+Freeform text entries posted by a client. Sorted by creation date.
+
+## Queries
+
+Each model exposes class methods for the key queries:
+
+| Method | Description |
+|--------|-------------|
+| `Provider.clients_for(provider_id)` | All clients for a given provider |
+| `Provider.journal_entries_for(provider_id)` | All journal entries across all clients of a given provider, sorted by date |
+| `Client.providers_for(client_id)` | All providers for a given client |
+| `Client.journal_entries_for(client_id)` | All journal entries for a given client, sorted by date |
